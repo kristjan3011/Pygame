@@ -1,0 +1,56 @@
+import pygame
+pygame.init()
+
+# Kasutajasõbralik värvikaart
+def color(nimi):
+    nimi = nimi.lower()
+    kaardistus = {
+        "punane": (255, 0, 0),
+        "kollane": (255, 255, 0),
+        "roheline": (0, 255, 0),
+        "sinine": (0, 0, 255),
+        "valge": (255, 255, 255),
+        "must": (0, 0, 0),
+        "hall": (80, 80, 80)
+    }
+    return kaardistus.get(nimi, None)  # kui värvi ei leita, tagastab None
+
+
+# Kasutaja sisend (kõik enne PyGame loopi)
+width = int(input("Sisesta akna laius (nt 300): "))
+height = int(input("Sisesta akna kõrgus (nt 300): "))
+radius = int(input("Sisesta foori ringide raadius (nt 25): "))
+# muutujad värvideks
+first_light = color(input("1. tule värv (nt 'punane'): "))
+second_light = color(input("2. tule värv (nt 'kollane'): "))
+third_light = color(input("3. tule värv (nt 'roheline'): "))
+
+# Taustavärv
+taust_input = input("Sisesta taustavärv (nt 'must', 'sinine') või jäta tühjaks: ")
+if taust_input.strip() == "":
+    BACKGROUND = (0, 0, 0)  # vaikimisi must
+else:
+    BACKGROUND = color(taust_input)
+    if BACKGROUND is None:
+        print("Tundmatu värv, kasutan musta.")
+        BACKGROUND = (0, 0, 0)
+
+# Akna loomine
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Foor – Kristjan")
+GREY = (80, 80, 80)
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    screen.fill(BACKGROUND)
+
+    # Foori korpus
+    pygame.draw.rect(screen, GREY, (width//2 - radius, 20, radius*2, radius*6))
+    pygame.draw.circle(screen, first_light, (width//2, 20 + radius), radius)
+    pygame.draw.circle(screen, second_light, (width//2, 20 + radius*3), radius)
+    pygame.draw.circle(screen, third_light, (width//2, 20 + radius*5), radius)
+    pygame.display.flip()
+
+pygame.quit()
