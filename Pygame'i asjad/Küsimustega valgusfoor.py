@@ -52,6 +52,7 @@ BACKGROUND = safe_color("Sisesta taustavärv (nt 'must', 'sinine') või jäta t�
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Foor – Kristjan")
 GREY = (80, 80, 80)
+
 screen.fill(BACKGROUND)
 
 running = True
