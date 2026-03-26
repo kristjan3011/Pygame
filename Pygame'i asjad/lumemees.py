@@ -80,7 +80,6 @@ while running:
     pygame.draw.line(screen, BROWN, (60, 80), (75, 65), 3)
     pygame.draw.line(screen, BROWN, (60, 80), (50, 75), 3)
     pygame.draw.line(screen, BROWN, (60, 80), (70, 75), 3)
-
     pygame.display.flip()
 
 pygame.quit()
