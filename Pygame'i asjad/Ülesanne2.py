@@ -3,7 +3,7 @@ import sys
 
 pygame.init()
 
-# Ekraani seadistus
+#ekraani seadistus
 screen = pygame.display.set_mode((640, 480))
 pygame.display.set_caption("Ülesanne 2")
 #pildid ja skaleerimine
@@ -17,26 +17,26 @@ chat = pygame.image.load("chat.png")
 chat = pygame.transform.smoothscale(chat, (252, 200))#jutumull
 
 #teksti seadistus
-font = pygame.font.SysFont("arial", 28)
+font = pygame.font.SysFont("arial", 28) # fondi valikud on: times_new_roman, calibri, comic_sans
 text = font.render("Tere, olen Kristjan", True, (255, 255, 255))
 
-# Põhiloop
+#põhiloop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
-    # Taust
+    #taust
     screen.blit(bg, (0, 0))
 
-    # Poemüüja
+    #poemüüja
     screen.blit(seller, (105, 155))
 
-    # Jutumull
+    #jutumull
     screen.blit(chat, (250, 65))
 
-    # Tekst jutumulli sisse
-    screen.blit(text, (290, 145))
+    #tekst jutumulli sisse
+    screen.blit(text, (280, 145))
 
     pygame.display.flip()
