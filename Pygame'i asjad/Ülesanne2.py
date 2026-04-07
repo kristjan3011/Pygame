@@ -58,9 +58,9 @@ while True:
     tekst_kaar = "0502 KIVELUT" #0502 KIVELUT, TULEVIK 2050
 
     # kaare seadistus
-    center_x, center_y = 120, 5  # kaare keskpunkt
+    center_x, center_y = 240, 10  # kaare keskpunkt
     radius = 100  # kaare raadius
-    algus_nurk = 0.8  # kust kaar algab (radiaanides)
+    algus_nurk = 0.1  # kust kaar algab (radiaanides)
 
     for i, tahl in enumerate(tekst_kaar):
         nurk = algus_nurk + i * 0.13  # tähtede vahekaugus
