@@ -1,17 +1,22 @@
 import pygame, sys, random
-
+# Kristjan IS25
 pygame.init()
 
-# Taustaheli
-pygame.mixer.music.load("music/tausta_muss.mp3")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
+# Taustamuusika
+try:
+    pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load("music/tausta_muss.mp3")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+except Exception as e:
+    print("Heli ei saanud käivituda:", e)
 
 # Ekraan
-LAIUS = 640
-KORGUS = 480
+LAIUS = 640 # 1920 / 640
+KORGUS = 480 # 1080 / 480
 ekraan = pygame.display.set_mode((LAIUS, KORGUS))
-pygame.display.set_caption("Ping Pong")
+pygame.display.set_caption("Ping Pong 2")
 
 # Värvid
 TAUST = (220, 235, 255)
@@ -38,7 +43,7 @@ def reset_game():
     global pall_x, pall_y, pall_kiirus_x, pall_kiirus_y
     global alus_x, alus_y, skoor, game_over
 
-    # X suvaline üle ekraani, Y umbes 100 (480 puhul)
+    # X suvaline üle ekraani, Y umbes 50 (480 puhul)
     pall_x = random.randint(0, LAIUS - PALL_SUURUS)
     pall_y = 50
 
@@ -47,7 +52,7 @@ def reset_game():
     pall_kiirus_y = CONST_SPEED_Y
 
     alus_x = (LAIUS - ALUS_LAIUS) // 2
-    alus_y = int(KORGUS / 1.5)
+    alus_y = int(KORGUS / 1.1)
 
     skoor = 0
     game_over = False
