@@ -1,0 +1,54 @@
+{
+  "mangude_arv": 6,
+  "parim_skoor": 14,
+  "parim_tase": 2,
+  "skooride_summa": 31,
+  "ajalugu": [
+    {
+      "aeg": "2026-06-09 13:10",
+      "skoor": 0,
+      "tase": 1
+    },
+    {
+      "aeg": "2026-06-09 13:10",
+      "skoor": 14,
+      "tase": 2
+    },
+    {
+      "aeg": "2026-06-09 13:11",
+      "skoor": 10,
+      "tase": 2
+    },
+    {
+      "aeg": "2026-06-09 13:31",
+      "skoor": 7,
+      "tase": 1
+    },
+    {
+      "aeg": "2026-06-09 13:31",
+      "skoor": 0,
+      "tase": 1
+    },
+    {
+      "aeg": "2026-06-09 13:31",
+      "skoor": 0,
+      "tase": 1
+    }
+  ],
+  "saavutused": {
+    "Esimene suutäis": true,
+    "10 punkti klubis": true,
+    "Ellujääja": false,
+    "Kiirusemeister": true,
+    "Boonusekütt": true,
+    "Suurmeister": false
+  },
+  "seaded": {
+    "heli_sees": true,
+    "ruudustik_sees": true,
+    "raskus": "Keskmine",
+    "teema_nimi": "Klassikaline",
+    "algus_reziim": "oota",
+    "helitugevus": 5
+  }
+}
