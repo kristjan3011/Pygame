@@ -64,7 +64,7 @@ PUNANE = (180, 20, 20)
 HALL = (180, 180, 180)
 TUME_HALL = (90, 90, 90)
 MENUU_TAUST = (15, 45, 95)
-
+KULDNE = (255, 215, 0)
 # Raskusastmed (algkiirus, kiiruse kasv, max kiirus)
 RASKUSED = {
     "Lihtne": (6, 0.3, 12),
@@ -453,7 +453,7 @@ class Mang:
                 aktiivsed.append((tekst, lopp - aeg))
         self.saavutuste_teated = [(t, l) for t, l in self.saavutuste_teated if aeg < l]
 
-        for i, (tekst, jarel) in enumerate(aktivsed):
+        for i, (tekst, jarel) in enumerate(aktiivsed):
             alpha = min(255, int((jarel / 3000) * 255))
             pind = font_tavaline.render(tekst, True, KULDNE)
             kiht = pygame.Surface(pind.get_size(), pygame.SRCALPHA)

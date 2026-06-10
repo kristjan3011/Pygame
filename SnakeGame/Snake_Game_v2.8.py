@@ -17,9 +17,6 @@ import json
 import os
 from datetime import datetime
 
-# -------------------------------------------------------
-# PYGAME INITSIALISEERIMINE
-# -------------------------------------------------------
 pygame.init()
 
 # -------------------------------------------------------
@@ -85,7 +82,7 @@ font_vike     = pygame.font.SysFont("Arial", 18)
 # Aken ja kell
 _fullscreen: bool = False
 ekraan: pygame.Surface = pygame.display.set_mode((LAIUS, KORGUS))
-pygame.display.set_caption("Snake Game – Kristjan IS25 v2.3")
+pygame.display.set_caption("Snake Game – Kristjan IS25 v2.8")
 kell = pygame.time.Clock()
 
 
@@ -685,7 +682,7 @@ class Mang:
         while True:
             ekraan.fill(MENUU_TAUST)
             tekst_tsentris(ekraan, "SNAKE GAME", font_suur, KULDNE, -150)
-            tekst_tsentris(ekraan, "Kristjan – IS25  |  v2.3", font_vike, HALL, -100)
+            tekst_tsentris(ekraan, "Kristjan – IS25  |  v2.8", font_vike, HALL, -100)
 
             for i, valik in enumerate(valikud):
                 varv = VALGE if i == valitud else TUME_HALL
@@ -937,7 +934,7 @@ class Mang:
                     tekst_tsentris(ekraan, "Vajuta nooleklahvi alustamiseks",
                                    font_vike, HALL, 215)
                 pygame.display.flip()
-                kell.tick(30)
+                kell.tick(60)
                 continue
 
             elus = self.madu.liiguta()
