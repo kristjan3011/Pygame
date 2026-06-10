@@ -19,7 +19,7 @@ blue = pygame.Color(0, 0, 255)
 # Initialising pygame
 pygame.init()
 
-# Initialise game window
+# Initialize game window
 pygame.display.set_caption('GeeksforGeeks Snakes')
 game_window = pygame.display.set_mode((window_x, window_y))
 
