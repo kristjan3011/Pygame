@@ -1,0 +1,127 @@
+PAC-MAN arvestustoo testimise logi
+==================================
+
+Projekt: Pac-Man Pygame arvestustoo
+Loppfail: pacman_arvestus.py
+Algfailid: pacman1.py, pacman2.py
+
+Katse 1
+-------
+Muudatus/test: Kontrollisin algset pacman1.py faili ja vaatasin, kas juhendis toodud klahvid vastavad tegelikule koodile.
+Tulemus: Leidsin vea. Kommentaaris oli kirjas WASD, kuid kood kasutas osaliselt U/D/L/R klahve. Lisaks oli R korraga restart ja paremale liikumine.
+Lahendus: Loppversioonis kasutan liikumiseks nooleklahve ja WASD-klahve. R jaab ainult restarti jaoks.
+
+Katse 2
+-------
+Muudatus/test: Lisasin uue faili pacman_arvestus.py, et algseid faile mitte ule kirjutada.
+Tulemus: Failistruktuur muutus selgemaks. Algfailid jaid alles ning loppversioon on eraldi failis.
+Lahendus: Dokumentatsioonis kirjeldasin, et pacman1.py ja pacman2.py on algsed failid ning pacman_arvestus.py on minu taiendatud versioon.
+
+Katse 3
+-------
+Muudatus/test: Lisasin menüü, kus saab valida Classic Mode'i ja Beginner Mode'i.
+Tulemus: Vaja oli eraldi olekut menu, sest muidu alustas mang kohe classic mode'is.
+Lahendus: Lisasin Game klassi oleku "menu". Klahv 1 alustab classic mode'i ja klahv 2 beginner mode'i.
+
+Katse 4
+-------
+Muudatus/test: Lisasin Beginner Mode'i, kus on lihtsam kaart ja ainult kaks kummitust.
+Tulemus: Esialgne kummituste loomise loogika eeldas alati nelja kummitust.
+Lahendus: Lisasin MODES seadistusse "ghost_count" valiku. Game.new_game loob kummitusi vastavalt valitud reziimile.
+
+Katse 5
+-------
+Muudatus/test: Kontrollisin Pacmani algpositsiooni Beginner Mode'is.
+Tulemus: Algpositsioon pidi sobima uue kaardiga, et Pacman ei alustaks seina voi gate'i sees.
+Lahendus: Lisasin MODES seadistusse eraldi "player_start" koordinaadid. Beginner Mode alustab ruudult (10, 19).
+
+Katse 6
+-------
+Muudatus/test: Parandasin tunneli ja collision-loogikat.
+Tulemus: Algse loogika puhul vois serva poole liikumine peatuda enne wrap-tunnelit, sest kontroll kasitles ekraanist valja minekut seinana.
+Lahendus: Lisasin is_tunnel_row funktsiooni. Kui rea vasak voi parem serv on avatud, lubatakse tegelasel horisontaalselt ekraanist valja liikuda ja teisest servast tagasi tulla.
+
+Katse 7
+-------
+Muudatus/test: Lisasin boonusvilja.
+Tulemus: Vaja oli tagada, et boonusvili ei ilmuks igal kaadril uuesti, kui punktide piir on juba uletatud.
+Lahendus: Lisasin fruit_spawned_at hulga, kuhu salvestan juba kasutatud ilmumise piirid.
+
+Katse 8
+-------
+Muudatus/test: Lisasin high score faili salvestamise.
+Tulemus: Kui faili ei olnud olemas voi seal oli vigane sisu, ei tohtinud mang kokku joosta.
+Lahendus: load_high_score kasutab try/except plokki. Vigase voi puuduva faili korral algab high score vaartusest 0.
+Hiljem tehtud parandus v1.1: eemaldasin high score .txt faili salvestamise. High score on nuud ainult sessiooni sees ja laheb programmi uuesti avamisel tagasi 0 peale.
+
+Katse 9
+-------
+Muudatus/test: Kontrollisin loppfaili syntaksit kasuga py -3.12 -m py_compile pacman_arvestus.py.
+Tulemus: Syntaksivigu ei olnud.
+Lahendus: Lisaparandusi ei olnud vaja.
+
+Katse 10
+--------
+Muudatus/test: Proovisin pygame'i importida vaikimisi Python 3.14 keskkonnas.
+Tulemus: Tekkis viga ModuleNotFoundError: No module named 'pygame'. Pygame'i paigaldus Python 3.14 keskkonda ebaonnestus, sest pip proovis seda lahtekoodist ehitada.
+Lahendus: Kontrollisin arvutis olevaid Pythoniversioone. Python 3.12 keskkonnas oli pygame 2.6.1 olemas, seega kasutan kaivitamiseks kasku py -3.12 pacman_arvestus.py.
+
+Katse 11
+--------
+Muudatus/test: Kaivitasin manguloogika dummy-video draiveriga ja simuleerisin 120 kaadrit nii classic kui beginner reziimis.
+Tulemus: Mang ei jooksnud kokku. Classic mode'is loodi 4 kummitust ja beginner mode'is 2 kummitust.
+Lahendus: Lisaparandusi ei olnud vaja.
+
+Katse 12
+--------
+Muudatus/test: Kontrollisin Beginner Mode'i kummituste AI-d.
+Tulemus: Algne loppversioon kasutas ka Beginner Mode'is BFS-teekonnaotsingut, mistottu kummitused jalgisid Pacmani liiga agressiivselt.
+Lahendus: Lisasin kummitustele ai_mode vaartuse. Classic Mode kasutab endiselt BFS-i, Beginner Mode kasutab tavaliikumisel random walk'i.
+
+Katse 13
+--------
+Muudatus/test: Kontrollisin, et Beginner Mode'i power pellet'i ajal kummituste fright-taimer ikka vaheneb.
+Tulemus: Esialgsel parandusel oli oht, et random walk haru peatab fright-loogika liiga vara.
+Lahendus: Jatsin fright-loogika enne tavalist random walk'i haru. Nii liiguvad beginner kummitused juhuslikult, aga power pellet'i taimer tootab edasi.
+
+Katse 14
+--------
+Muudatus/test: Kontrollisin, et mang ei loo enam pacman_highscore.txt faili.
+Tulemus: Faili salvestamise funktsioonid eemaldati ja high score on ainult programmi jooksutamise ajal malus.
+Lahendus: Eemaldasin pathlib Path kasutuse, load_high_score ja save_high_score funktsioonid ning asendasin need update_high_score funktsiooniga.
+
+Katse 15
+--------
+Muudatus/test: Testisin Classic Mode'i kummituste spawn-kohti.
+Tulemus: Neljas kummitus alustas ruudul (10, 13), mis oli klassikalises kaardis sein. Selle tõttu jai kummitus keskmise kasti juures kinni.
+Lahendus: Muutsin neljanda kummituse algpositsiooni ruudule (12, 11), mis on ghost house'i sees vaba liikumisruut. Kontrollis olid koik koduruudud labitavad.
+
+Katse 16
+--------
+Muudatus/test: Testisin menuus R klahvi.
+Tulemus: Menuu olekus ignoreeriti R klahvi, sest menuu sisend kasitles ainult klahve 1 ja 2.
+Lahendus: Lisasin menuu olekusse R klahvi toe. R alustab praeguse reziimi uuesti ja nullib skoori.
+
+Katse 17
+--------
+Muudatus/test: Testisin menuu alumist infoteksti Classic ja Beginner reziimi vahel liikudes.
+Tulemus: Tekst oli kogu aeg Beginner Mode'i tekst, sest draw_menu kasutas alati MODES["beginner"]["info"] vaartust.
+Lahendus: Muutsin draw_menu funktsiooni kasutama MODES[self.mode]["info"], et menuu alumine tekst vastaks praegu valitud reziimile.
+
+Kokkuvote
+---------
+Kokku dokumenteerisin 17 testimiskatset. Neist 11 puhul ilmnes viga voi parandamist vajav koht:
+
+1. klahvide konflikt;
+2. menu oleku puudumine;
+3. kummituste arv eri reziimides;
+4. beginner mode'i algpositsioon;
+5. tunneli/collision-loogika;
+6. vaikimisi Python 3.14 keskkonnas puuduv voi mittepaigalduv pygame;
+7. Beginner Mode'i liiga agressiivne BFS-pohine kummituste AI;
+8. high score .txt faili salvestamine, mis ei sobinud paranduste noudega;
+9. Classic Mode'i neljas kummitus alustas seina sees;
+10. menuus ei toiminud R restart;
+11. menuu alumine infotekst ei muutunud valitud reziimi jargi.
+
+Lisaks testisin boonusvilja, sessioonisisest high score'i, syntaksit, kummituste valjumist ghost house'ist ja luhikest dummy-kaivitust. Koik koodiga seotud vead said lahendatud ning muudatused on kirjeldatud failis dokumentatsioon.md.
