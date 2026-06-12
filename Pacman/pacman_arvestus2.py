@@ -9,7 +9,10 @@ Juhtimine:
 
 import random
 import sys
+import math
+from array import array
 from collections import deque
+from pathlib import Path
 
 import pygame
 
@@ -49,6 +52,8 @@ DOWN = (0, 1)
 LEFT = (-1, 0)
 RIGHT = (1, 0)
 DIRS = [UP, DOWN, LEFT, RIGHT]
+BASE_DIR = Path(__file__).resolve().parent
+SOUND_DIR = BASE_DIR
 
 
 # Klassikaline kaart.
@@ -337,7 +342,7 @@ class Pacman:
 
         if self.mouth > 2:
             points = [(cx, cy)]
-            for a in range(angle + self.mouth, angle + 360 - self.mouth, 5):
+            for a in range(angle - self.mouth, angle + self.mouth + 1, 5):
                 rotated = pygame.math.Vector2(radius, 0).rotate(-a)
                 points.append((cx + int(rotated.x), cy + int(rotated.y)))
             points.append((cx, cy))
@@ -578,10 +583,99 @@ class BonusFruit:
         pygame.draw.line(surface, GREEN, (cx + 4, cy - 10), (cx + 10, cy - 7), 2)
 
 
+class SoundManager:
+    """Lae ja mängi muusikat/efekte nii, et mäng töötaks ka puuduvate failidega."""
+
+    def __init__(self):
+        self.enabled = pygame.mixer.get_init() is not None
+        self.sounds = {}
+        self.music_started = False
+        self.waka_channel = None
+        if not self.enabled:
+            return
+
+        self.sounds = {
+            "waka": self._load_sound("pac-man-waka.mp3", 0.20),
+            "power": self._load_sound("eat-dot.mp3", 0.45),
+            "eat_ghost": self._load_sound("pac-man-ghost-eaten.mp3", 0.55),
+            "death": self._load_sound("pac-man-death.mp3", 0.60),
+            "fruit": self._load_sound("eat-dot.mp3", 0.45),
+            "level": self._tone(880, 0.14, 0.28),
+        }
+        self._load_music()
+
+    def _load_sound(self, filename, volume):
+        path = SOUND_DIR / filename
+        if not path.exists():
+            return None
+        try:
+            sound = pygame.mixer.Sound(str(path))
+            sound.set_volume(volume)
+            return sound
+        except pygame.error:
+            return None
+
+    def _tone(self, frequency, duration, volume):
+        sample_rate = 44100
+        sample_count = int(sample_rate * duration)
+        samples = array("h")
+        amplitude = int(32767 * volume)
+        for i in range(sample_count):
+            phase = i * frequency * 2 * math.pi / sample_rate
+            samples.append(int(amplitude * math.sin(phase)))
+        try:
+            return pygame.mixer.Sound(buffer=samples.tobytes())
+        except pygame.error:
+            return None
+
+    def _load_music(self):
+        path = SOUND_DIR / "music.mp3"
+        if not path.exists():
+            return
+        try:
+            pygame.mixer.music.load(str(path))
+            pygame.mixer.music.set_volume(0.24)
+        except pygame.error:
+            pass
+
+    def start_music(self):
+        if not self.enabled or self.music_started:
+            return
+        try:
+            pygame.mixer.music.play(-1)
+            self.music_started = True
+        except pygame.error:
+            pass
+
+    def update_waka(self, active):
+        if not self.enabled:
+            return
+
+        sound = self.sounds.get("waka")
+        if sound is None:
+            return
+
+        if active:
+            if self.waka_channel is None or not self.waka_channel.get_busy():
+                self.waka_channel = sound.play(loops=-1)
+        elif self.waka_channel is not None:
+            self.waka_channel.stop()
+            self.waka_channel = None
+
+    def play(self, name):
+        if not self.enabled:
+            return
+        sound = self.sounds.get(name)
+        if sound is None:
+            return
+        sound.play()
+
+
 class Game:
     """Peamine mängukontroller: olek, režiimid, sisend, punktiarvestus ja joonistamine."""
 
     def __init__(self):
+        pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
         self.screen = pygame.display.set_mode((W, H))
         pygame.display.set_caption("PAC-MAN arvestustöö")
@@ -591,6 +685,8 @@ class Game:
         self.font_small = pygame.font.SysFont("couriernew", 15)
         self.high_score = 0
         self.mode = "classic"
+        self.sound = SoundManager()
+        self.sound.start_music()
         self.new_game("classic")
         self.state = "menu"
 
@@ -712,6 +808,7 @@ class Game:
             self.grid[gy][gx] = EMPTY
             self.score += 50
             self.dots_eaten += 1
+            self.sound.play("power")
             for ghost in self.ghosts:
                 ghost.frighten()
             self.ghost_score_mult = 1
@@ -729,6 +826,7 @@ class Game:
             if dist < CELL:
                 self.score += 100
                 self.fruit.active = False
+                self.sound.play("fruit")
 
     def check_ghost_collisions(self):
         for ghost in self.ghosts:
@@ -740,14 +838,18 @@ class Game:
                 ghost.eat()
                 self.score += 200 * self.ghost_score_mult
                 self.ghost_score_mult *= 2
+                self.sound.play("eat_ghost")
             elif not ghost.eaten:
                 self.pacman.alive = False
                 self.lives -= 1
                 self.state = "dead"
                 self.state_timer = 0
+                self.sound.play("death")
                 return
 
     def update(self):
+        self.sound.update_waka(self.state == "playing")
+
         if self.state == "menu":
             return
 
@@ -774,6 +876,7 @@ class Game:
         if self.dots_eaten >= self.total_dots:
             self.state = "win"
             self.state_timer = 0
+            self.sound.play("level")
 
     def draw_maze(self):
         for y, row in enumerate(self.grid):
